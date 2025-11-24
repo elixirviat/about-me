@@ -3,178 +3,242 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Brand Bites: Abigail's Vending Machine</title>
+  <title>Abigail's 8-Bit Pixel-Mart</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      /* Remove all rounding */
+      border-radius: 0 !important; 
     }
 
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Satoshi:wght@400;500;600;700&family=ClashDisplay:wght@400;500;600;700&display=swap');
+    /* Import the 8-bit font */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    :root {
+      --pixel-font: 'Press Start 2P', monospace;
+      
+      /* --- NEW "Arcade Night" COLOR SCHEME --- */
+      --bg-color: #2b2b2b; /* Dark Grey Background */
+      --machine-bg: #1e3a8a; /* Deep Blue Machine */
+      --machine-bg-darker: #1a306d; /* Darker Blue */
+      --text-color: #f0f0f0; /* Light Text */
+      --primary-color: #ff00ff; /* Bright Magenta */
+      --secondary-color: #00ffff; /* Bright Cyan (for dates) */
+      --green-screen-bg: #223422; /* Dark Green */
+      --green-screen: #00ff00; /* Bright Green Text */
+      --border-color: #1a1a1a; /* Dark Border */
+      --shadow-color: #000;
+      --pixel-unit: 4px;
+    }
 
     body {
-      font-family: 'Space Grotesk', sans-serif;
-      background: linear-gradient(135deg, #FFB6C1, #E6E6FA, #F0E68C, #FFE4E1);
+      font-family: var(--pixel-font);
+      background: var(--bg-color);
+      color: var(--text-color);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px;
+      padding: 40px 20px; /* More padding for scrolling */
+      /* Keep images sharp */
+      image-rendering: pixelated;
+    }
+
+    /* --- 8-Bit Box Style --- */
+    .pixel-box {
+      background: var(--machine-bg);
+      border: var(--pixel-unit) solid var(--border-color);
+      padding: 20px;
+      /* Hard 8-bit shadow */
+      box-shadow: 8px 8px 0 0 var(--shadow-color);
+      position: relative;
+    }
+
+    .main-container {
+      max-width: 800px;
+      width: 100%;
     }
 
     .vending-machine {
-      background: linear-gradient(145deg, #F8BBD9, #E4C1F9);
-      border-radius: 20px;
+      background: var(--machine-bg-darker);
       padding: 20px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-      max-width: 1000px;
+      max-width: 100%;
       width: 100%;
       position: relative;
-      border: 4px solid #FFFFFF;
+      border: var(--pixel-unit) solid var(--border-color);
+      box-shadow: 8px 8px 0 0 var(--shadow-color);
+      
+      /* Scanline Effect */
+      overflow: hidden; /* Needed for the ::after pseudo-element */
     }
+    
+    /* This is the scanline overlay */
+    .vending-machine::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(
+            rgba(20, 20, 20, 0.1) 50%, 
+            transparent 50%
+        );
+        background-size: 100% 4px; /* 4px tall lines */
+        pointer-events: none; /* Lets you click through it */
+        opacity: 0.5;
+    }
+
 
     .machine-header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .machine-title {
-      color: #6B46C1;
-      font-size: clamp(20px, 5vw, 32px);
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-      font-family: 'ClashDisplay', sans-serif;
-      line-height: 1.2;
+      color: var(--text-color); /* Light title */
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: normal;
+      text-shadow: none;
+      font-family: var(--pixel-font);
+      line-height: 1.4;
     }
 
     .display-screen {
-      background: linear-gradient(145deg, #B8E6B8, #98FB98);
-      border: 4px solid #FFFFFF;
-      border-radius: 15px;
+      background: var(--green-screen-bg);
+      border: var(--pixel-unit) solid var(--border-color);
       padding: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       min-height: 100px;
-      color: #2D5016;
-      font-size: clamp(14px, 3vw, 18px);
+      color: var(--green-screen);
+      font-size: 14px;
       line-height: 1.6;
-      box-shadow: inset 0 4px 15px rgba(0,0,0,0.1);
-      font-weight: 500;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+      font-weight: normal;
     }
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      /* 4 columns for 8 items */
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .product-slot {
-      background: #FFFFFF;
-      border-radius: 15px;
-      padding: 20px 15px;
+      background: var(--machine-bg);
+      border: var(--pixel-unit) solid var(--border-color);
+      padding: 15px 10px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border: 3px solid transparent;
+      transition: none; /* No smooth transitions */
       position: relative;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
       min-height: 120px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      animation: float 6s ease-in-out infinite;
+      animation: none; /* Remove float */
+    }
+    
+    /* Style for disabled buttons */
+    .product-slot.disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-3px); }
+    .product-slot:not(.disabled):hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--primary-color);
+      background: #1a306d;
+      animation: none;
     }
 
-    .product-slot:nth-child(even) {
-      animation-delay: -3s;
-    }
-
-    .product-slot:nth-child(3n) {
-      animation-delay: -1.5s;
-    }
-
-    .product-slot:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-      border-color: #FFB6C1;
-      background: linear-gradient(145deg, #FFFFFF, #FFF0F5);
-      animation-play-state: paused;
-    }
-
-    .product-slot:active {
-      transform: translateY(-2px);
+    .product-slot:not(.disabled):active {
+      transform: translate(2px, 2px);
     }
 
     .product-slot.selected {
-      background: linear-gradient(145deg, #FFB6C1, #FFC0CB);
-      border-color: #FF69B4;
-      animation: pulse 1s ease-in-out, float 6s ease-in-out infinite;
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      animation: none; /* Remove pulse */
+    }
+    
+    .product-slot.selected .product-name {
+      color: #000;
     }
 
     .product-slot.tried {
       opacity: 0.7;
-      background: linear-gradient(145deg, #E6E6FA, #F0F8FF);
+      background: #444;
     }
 
     .product-slot.tried::after {
       content: '✓';
       position: absolute;
-      top: 8px;
-      right: 8px;
-      background: #2ECC71;
-      color: white;
-      border-radius: 50%;
+      top: 4px;
+      right: 4px;
+      background: var(--green-screen);
+      color: #000;
       width: 18px;
       height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: bold;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    .product-emoji {
-      font-size: clamp(28px, 6vw, 40px);
+    /* --- NEW <img> ICON STYLES --- */
+    /* This styles your new <img> icons */
+    .product-img-icon {
+      width: 48px;
+      height: 48px;
       margin-bottom: 10px;
+      /* This is the key for pixelation */
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -webkit-crisp-edges;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      /* If the src is broken, show a box */
+      background: #000;
+      border: 1px dashed var(--primary-color);
     }
+    /* --- END NEW <img> ICON STYLES --- */
 
     .product-name {
-      font-size: clamp(12px, 2.5vw, 16px);
-      color: #6B46C1;
-      font-weight: 600;
-      font-family: 'ClashDisplay', sans-serif;
+      font-size: 12px;
+      color: var(--text-color);
+      font-weight: normal;
+      font-family: var(--pixel-font);
     }
 
+    /* --- EDITED DISPENSED ITEM --- */
     .dispensed-item {
-      background: linear-gradient(145deg, #FFE4B5, #FFEAA7);
-      border-radius: 15px;
-      padding: 25px;
+      background: #f0f0f0; /* Light background */
+      padding: 20px;
       margin-top: 20px;
-      color: #8B4513;
-      line-height: 1.8;
-      box-shadow: 0 10px 25px rgba(255, 228, 181, 0.4);
-      animation: slideDown 0.5s ease-out;
-      font-size: clamp(14px, 3vw, 18px);
-      font-weight: 500;
-      border: 3px solid #FFFFFF;
+      color: var(--border-color); /* Dark text */
+      line-height: 1.6;
+      animation: slideDown 0.2s ease-out;
+      font-size: 14px;
+      font-weight: normal;
+      border: var(--pixel-unit) solid var(--border-color);
+    }
+    /* --- END EDIT --- */
+    
+    .dispensed-title {
+        color: var(--primary-color);
+        font-size: 16px;
+        margin-bottom: 10px;
     }
 
     @keyframes slideDown {
       from {
-        transform: translateY(-30px);
+        transform: translateY(-10px);
         opacity: 0;
       }
       to {
@@ -188,21 +252,20 @@
       top: 20px;
       right: 20px;
       width: 40px;
-      height: 6px;
-      background: linear-gradient(145deg, #DDA0DD, #DA70D6);
-      border-radius: 3px;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+      height: 8px;
+      background: #111;
+      border: var(--pixel-unit) solid var(--border-color);
     }
 
     .led-light {
       position: absolute;
-      top: 18px;
+      top: 24px;
       left: 20px;
       width: 12px;
       height: 12px;
-      background: #00FF7F;
-      border-radius: 50%;
-      box-shadow: 0 0 15px #00FF7F;
+      background: var(--green-screen);
+      border: 2px solid #000;
+      box-shadow: 0 0 10px var(--green-screen);
       animation: blink 2s infinite;
     }
 
@@ -212,134 +275,508 @@
     }
 
     .progress-bar {
-      background: linear-gradient(145deg, #E6E6FA, #F0F8FF);
-      border-radius: 20px;
+      background: var(--green-screen-bg);
       padding: 15px 20px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       text-align: center;
-      font-family: 'ClashDisplay', sans-serif;
-      font-weight: 600;
-      color: #6B46C1;
-      border: 3px solid #FFFFFF;
+      font-family: var(--pixel-font);
+      font-weight: normal;
+      color: var(--green-screen);
+      border: var(--pixel-unit) solid var(--border-color);
+      font-size: 12px;
     }
 
     .progress-fill {
-      background: linear-gradient(90deg, #FFB6C1, #DDA0DD, #98FB98);
-      height: 6px;
-      border-radius: 3px;
-      margin-top: 8px;
-      transition: width 0.5s ease;
-      box-shadow: 0 2px 8px rgba(255, 182, 193, 0.4);
+      background: var(--green-screen);
+      height: 8px;
+      margin-top: 10px;
+      transition: width 0.3s ease;
+      box-shadow: none;
     }
 
-    .reset-button {
-      background: linear-gradient(145deg, #FF6B6B, #FF8E8E);
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 20px;
-      font-size: clamp(14px, 3vw, 16px);
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    /* --- NEW BUTTON STYLES --- */
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin: 15px auto;
-      display: block;
     }
 
+    .pixel-button {
+      color: white;
+      border: var(--pixel-unit) solid var(--border-color);
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: normal;
+      font-family: var(--pixel-font);
+      cursor: pointer;
+      transition: none;
+      box-shadow: 4px 4px 0 0 var(--shadow-color);
+    }
+    
+    .pixel-button:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+    
+    .reset-button {
+      background: #d90000; /* Red */
+    }
+    
     .reset-button:hover {
-      background: linear-gradient(145deg, #FF8E8E, #FF6B6B);
-      transform: translateY(-2px);
+      background: #ff0000;
+    }
+    
+    .resume-button {
+      background: #008000; /* Green */
+    }
+    
+    .resume-button:hover {
+      background: #00aa00;
+    }
+    /* --- END NEW BUTTON STYLES --- */
+
+
+    /* --- New About Me Section --- */
+    .about-me {
+      margin-top: 40px; /* Space from vending machine */
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+      align-items: center;
     }
 
-    .reset-button:active {
-      transform: translateY(0);
+    .avatar-placeholder {
+      width: 100%;
+      min-height: 150px;
+      background: var(--machine-bg-darker);
+      border: var(--pixel-unit) solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
     }
+    
+    .about-text h2 {
+      color: var(--text-color);
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .about-text p {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    
+    /* --- New Resume Section --- */
+    .resume-section {
+        margin-top: 40px;
+        padding: 20px;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+    
+    .resume-section h2 {
+        font-size: 20px;
+        color: var(--text-color);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .resume-category {
+        margin-bottom: 30px;
+    }
+    
+    .resume-category h3 {
+        font-size: 16px;
+        color: var(--primary-color);
+        border-bottom: var(--pixel-unit) solid var(--border-color);
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+
+    /* --- NEW RESUME DEMARCATION --- */
+    .resume-item {
+        margin-bottom: 15px;
+        border-bottom: var(--pixel-unit) dashed var(--machine-bg-darker);
+        padding-bottom: 15px;
+    }
+    
+    .resume-item:last-child {
+        border-bottom: none;
+    }
+    /* --- END EDIT --- */
+    
+    .resume-item h4 {
+        font-size: 14px;
+        color: var(--text-color);
+        margin-bottom: 5px;
+    }
+    
+    /* --- NEW RESUME DATE VISIBILITY --- */
+    .resume-item h4 span {
+        color: var(--secondary-color); /* Bright Cyan */
+        font-size: 12px;
+        float: right;
+    }
+    /* --- END EDIT --- */
+    
+    .resume-item p {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .resume-item ul {
+        list-style: none;
+        padding-left: 15px;
+    }
+    
+    .resume-item li::before {
+        content: ">>";
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-right: 10px;
+    }
+    
+    /* --- NEW SUB-HEADING STYLE --- */
+    .resume-sub-heading {
+        font-size: 12px;
+        color: var(--primary-color); /* Magenta */
+        margin-top: 15px; /* Space above */
+        margin-bottom: 5px; /* Space before list */
+        font-weight: normal;
+    }
+    /* --- END NEW STYLE --- */
+    
+    /* --- NEW GREEN BOX STYLE --- */
+    .resume-list-box {
+        background: var(--green-screen-bg);
+        border: var(--pixel-unit) solid var(--green-screen);
+        padding: 15px;
+        margin-top: 10px;
+        list-style: none;
+    }
+    
+    .resume-list-box li {
+        color: var(--green-screen);
+    }
+    
+    .resume-list-box li::before {
+        color: var(--green-screen);
+    }
+    /* --- END NEW STYLE --- */
+    
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      body {
+          padding: 20px 10px;
+      }
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .about-me {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .avatar-placeholder {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 20px auto;
+      }
+      
+      .resume-item h4 span {
+        float: none;
+        display: block;
+        color: var(--secondary-color);
+      }
+    }
+
   </style>
 </head>
 <body>
-<!-- The rest of the HTML will continue in the next chunk due to length -->
+
+<div class="main-container">
 
   <div class="vending-machine">
     <div class="led-light"></div>
     <div class="coin-slot"></div>
 
     <div class="machine-header">
-      <h1 class="machine-title">Brand Bites: Abigail's Vending Machine</h1>
+      <h1 class="machine-title">Abigail's 8-Bit Pixel-Mart</h1>
     </div>
 
+    <!-- Updated Display Text -->
     <div class="display-screen" id="display">
-      I’ve packed this machine with flavour and function. Tap any snack to explore the strategy, story, and structure I'd bring to the Marketing Club!
+      Hello, internet snacker! I'm Abigail, a freshly-minted MBA graduate who's passionate about marketing. I love bringing a blend of creativity and strategy to all I do, so pick a snack to know more about me!
     </div>
 
     <div class="progress-bar">
-      <div id="progressText">Snacks Tried: 0 / 10</div>
+      <!-- Updated total to 8 -->
+      <div id="progressText">Snacks Tried: 0 / 8</div>
       <div class="progress-fill" id="progressFill" style="width: 0%"></div>
     </div>
 
     <div class="product-grid">
-      <div class="product-slot" data-content="I’m applying to the Marketing Club because I think deeply about brands, people, and what earns their attention. I care about clarity, emotional logic, and the real work behind perception.">
-        <span class="product-emoji">🧃</span>
+      <!-- Item 1 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I like turning briefs into stories people remember. Strategy and storytelling work better when they meet halfway.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Brand Juice Icon" class="product-img-icon">
         <div class="product-name">Brand Juice</div>
       </div>
-      <div class="product-slot" data-content="My vision for the club is to make it sharper, not just louder. I want to help build content, sessions, and collabs that reflect smart marketing, not only trend cycles.">
-        <span class="product-emoji">🍟</span>
-        <div class="product-name">Collab Chips</div>
-      </div>
-      <div class="product-slot" data-content="I’m drawn to brand, digital, and consumer behavior. I like studying how people make choices, what earns trust, and how storytelling influences memory.">
-        <span class="product-emoji">🍫</span>
-        <div class="product-name">Behavior Bar</div>
-      </div>
-      <div class="product-slot" data-content="Marketing isn’t just growth hacks or viral ads. It’s timing, clarity, and good judgment. I enjoy building structure around those instincts.">
-        <span class="product-emoji">🍺</span>
-        <div class="product-name">Philosophy Fizz</div>
-      </div>
-      <div class="product-slot" data-content="During my internship at Tata, I worked on a customer experience microsite — writing homepage and event copy, managing vendors, and aligning brand with experience.">
-        <span class="product-emoji">🍪</span>
-        <div class="product-name">Tata Treats</div>
-      </div>
-      <div class="product-slot" data-content="I created internal macros to allocate jurors and generate folders automatically. It saved hours, reduced friction, and cleaned up a chaotic process.">
-        <span class="product-emoji">🍭</span>
-        <div class="product-name">Process Pop</div>
-      </div>
-      <div class="product-slot" data-content="Before B-school, I wrote for pharma, banking, tourism, and tech clients. I’m trained to be fast, intentional, and precise across platforms.">
-        <span class="product-emoji">🍿</span>
+      <!-- Item 2 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I started in copywriting, writing for pharma, tech, banking, and tourism. Every word had to earn its space.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Copy Crunch Icon" class="product-img-icon">
         <div class="product-name">Copy Crunch</div>
       </div>
-      <div class="product-slot" data-content="I want to bring in marketers who’ve actually built brands or navigated shifts in media and audience behavior. Founders, not just frameworks.">
-        <span class="product-emoji">🥤</span>
-        <div class="product-name">Speaker Soda</div>
+      <!-- Item 3 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I build small automations that save big time. A few macros later, chaos turns into structure.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Process Pop Icon" class="product-img-icon">
+        <div class="product-name">Process Pop</div>
       </div>
-      <div class="product-slot" data-content="I’d love to contribute by building high-signal content, structuring speaker sessions, and co-creating anything the club publishes.">
-        <span class="product-emoji">🍬</span>
-        <div class="product-name">Collab Caramel</div>
+      <!-- Item 4 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I enjoy working with designers and UX teams. The best ideas happen when words and visuals talk to each other.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Design Drizzle Icon" class="product-img-icon">
+        <div class="product-name">Design Drizzle</div>
       </div>
-      <div class="product-slot" data-content="If selected, I’ll bring structure, ideas, and follow-through. That’s how I like to work, consistently and without needing a push.">
-        <span class="product-emoji">🥠</span>
-        <div class="product-name">Action Bites</div>
+      <!-- Item 5 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I love the planning side of marketing. GTM strategy, insight work, and the numbers that prove an idea right.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Strategy Sundae Icon" class="product-img-icon">
+        <div class="product-name">Strategy Sundae</div>
+      </div>
+      <!-- Item 6 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I like leading calm, organized teams. Good collaboration feels effortless when everyone knows what they’re doing.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Collab Chips Icon" class="product-img-icon">
+        <div class="product-name">Collab Chips</div>
+      </div>
+      <!-- Item 7 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="Psychology shapes everything I do. Understanding how people think makes marketing a little more human.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Behavior Bar Icon" class="product-img-icon">
+        <div class="product-name">Behavior Bar</div>
+      </div>
+      <!-- Item 8 - Replaced with <img> tag -->
+      <div class="product-slot" data-content="I unwind with beauty, gaming, and side projects. Aesthetics make me happy, so does good design.">
+        <!-- TODO: Replace src="" with your Imgur link! -->
+        <img src="" alt="Mystery Snack Icon" class="product-img-icon">
+        <div class="product-name">Mystery Snack</div>
       </div>
     </div>
 
-    <button class="reset-button" onclick="resetMachine()">🔄 Reset Machine</button>
+    <!-- NEW BUTTON LAYOUT -->
+    <div class="button-container">
+        <button class="pixel-button reset-button" onclick="resetMachine()">[ RESET ]</button>
+        <button class="pixel-button resume-button" id="resumeButton">[ RESUME ]</button>
+    </div>
+    <!-- END NEW LAYOUT -->
+
     <div id="dispensedArea"></div>
   </div>
+
+  <!-- --- About Me Section --- -->
+  <section class="about-me pixel-box">
+    <div class="avatar-placeholder">
+      [Your 8-bit
+      Avatar Here]
+    </div>
+    <div class="about-text">
+      <h2>About Me</h2>
+      <p>
+        I'm Abigail, a brand thinker and strategist. This vending machine is a small taste of my approach: clear, engaging, and built with purpose.
+      </p>
+    </div>
+  </section>
+  
+  <!-- --- New Resume Section (with ID) --- -->
+  <section class="resume-section pixel-box" id="resumeSection">
+      <h2>[ My Resume ]</h2>
+      
+      <!-- Education -->
+      <div class="resume-category">
+          <h3>EDUCATION</h3>
+          <div class="resume-item">
+              <h4>Master of Business Administration <span>2024 - Current</span></h4>
+              <p>BITS School of Management (BITSoM), Mumbai</p>
+          </div>
+          <div class="resume-item">
+              <h4>B.A (English Literature) <span>2020</span></h4>
+              <p>Sophia College for Women (Autonomous), Mumbai | 8.46/10 (Rank 2)</p>
+          </div>
+          <div class="resume-item">
+              <h4>B.A (Psychology) <span>2019</span></h4>
+              <p>Sophia College for Women (Autonomous), Mumbai | 8.45/10</p>
+          </div>
+          <div class="resume-item">
+              <h4>Indian School Certificate <span>2015</span></h4>
+              <p>Bombay Scottish School - Mahim, Mumbai | 94.40% (Rank 1)</p>
+          </div>
+          <div class="resume-item">
+              <h4>Indian Certificate of Secondary Education <span>2013</span></h4>
+              <p>Bombay Scottish School - Powai, Mumbai | 80.67%</p>
+          </div>
+      </div>
+      
+      <!-- Work Experience -->
+      <div class="resume-category">
+          <h3>WORK EXPERIENCE</h3>
+          <div class="resume-item">
+              <h4>Weber-Shandwick - Digital, Senior Copywriter <span>Sep'20 - Jan'23 (28 Months)</span></h4>
+              
+              <!-- --- EDITED: ADDED SUB-HEADINGS AND GROUPED LISTS --- -->
+              <h5 class="resume-sub-heading">Digital Marketing</h5>
+              <ul class="resume-list-box">
+                  <li>Boosted follower engagement 159% in 12 months by publishing 1k+ social posts.</li>
+                  <li>Drove 8.3M+ views for clients by ideating and executing integrated campaigns.</li>
+                  <li>Increased follower count +460% by tailoring copy to customer pain points.</li>
+                  <li>Exceeded engagement target by 331% for an MNC client with thought-leadership content.</li>
+              </ul>
+              
+              <h5 class="resume-sub-heading">Employer Branding</h5>
+              <ul class="resume-list-box">
+                  <li>Rebranded an intl. tourism board's microsite, applying consumer insights to UX copywriting.</li>
+                  <li>Rebranded a chemical firm into an IT employer brand, from pitch to execution.</li>
+              </ul>
+              
+              <h5 class="resume-sub-heading">Business Development</h5>
+              <ul class="resume-list-box">
+                  <li>Acquired ₹55 lakh in new business by driving persuasive RFP copy and cross-team collaboration.</li>
+                  <li>Increased client retention +27%, sustaining ₹95 lakh in revenue.</li>
+              </ul>
+              
+              <h5 class="resume-sub-heading">Stakeholder Management</h5>
+              <ul class="resume-list-box">
+                  <li>Presented monthly social media insights to client managers.</li>
+                  <li>Trained 4 interns in copywriting, campaign planning, & client interaction.</li>
+              </ul>
+              <!-- --- END EDIT --- -->
+              
+          </div>
+      </div>
+      
+      <!-- Summer Internship -->
+      <div class="resume-category">
+          <h3>SUMMER INTERNSHIP</h3>
+          <div class="resume-item">
+              <h4>Tata Sons, Brand & Marketing - Summer Intern <span>Apr'25 - Jun'25</span></h4>
+              <!-- --- NEW SUB-HEADING ADDED --- -->
+              <h5 class="resume-sub-heading">Customer Centricity Award Program</h5>
+              <ul class="resume-list-box">
+                  <li>Negotiated vendor for 76K+ certificates, reducing costs from ₹12 lakh to ₹5.8 lakh.</li>
+                  <li>Built VBA macros to automate jury allocations and generate scoring sheets, saving 16+ hours.</li>
+                  <li>Facilitated two customer jury panels & the final evaluation, managing briefs, queries, and selection.</li>
+                  <li>Designed homepage copy and CTA flow for the CX-CS website.</li>
+                  <li>Worked with UX/design teams to translate user journeys into wireframes.</li>
+                  <li>Curated and themed 25+ award-winning employee stories for the Customer Centricity team.</li>
+              </ul>
+          </div>
+          <div class="resume-item">
+              <h4>Bifrost AI, Founders' Office - Strategy Analyst <span>Apr'24 - Jun'24</span></h4>
+              <!-- --- NEW SUB-HEADING ADDED --- -->
+              <h5 class="resume-sub-heading">Strategic Planning</h5>
+              <ul class="resume-list-box">
+                  <li>Built GTM strategy for a Gen AI SaaS platform, identifying 200+ accounts across 4 verticals.</li>
+                  <li>Developed financial model for revenue and cost forecasts, used to inform investor pitches.</li>
+                  <li>Led global PR strategy for Series A, evaluating 15 media outlets.</li>
+              </ul>
+          </div>
+      </div>
+
+      <!-- Positions of Responsibility -->
+      <div class="resume-category">
+          <h3>POSITIONS OF RESPONSIBILITY</h3>
+          <div class="resume-item">
+              <h4>Festival Coordinator <span>2018</span></h4>
+              <ul class="resume-list-box">
+                  <li>Achieved ~20k footfall for the college festival by securing outdoor media sponsorships.</li>
+                  <li>Improved follower count +17% on fest pages by creating content.</li>
+                  <li>Secured 4 sponsors through targeted outreach, leading negotiations.</li>
+              </ul>
+          </div>
+          <div class="resume-item">
+              <h4>Head of Press Corps <span>2014</span></h4>
+              <ul class="resume-list-box">
+                  <li>Directed 6+ reporters across 4 committees, delivering accurate and timely event coverage.</li>
+                  <li>Produced 8 newsletters, highlighting committee proceedings.</li>
+              </ul>
+          </div>
+      </div>
+      
+      <!-- Extracurricular -->
+      <div class="resume-category">
+          <h3>EXTRACURRICULAR ACTIVITIES</h3>
+          <div class="resume-item">
+              <h4>Product Management <span>2025</span></h4>
+              <ul class="resume-list-box">
+                  <li>Selected as the only 1/11 Senior Club members after rigorous assignment & interview.</li>
+                  <li>Appointed Co-Head of Outreach, leading 5 juniors to secure speakers, live projects, and sponsorships.</li>
+              </ul>
+          </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="resume-category">
+          <h3>CERTIFICATIONS</h3>
+          <div class="resume-item">
+              <h4>Product Mgmt <span>2025</span></h4>
+              <ul class="resume-list-box"><li>Pursuing IBM Product Management Certificate – product lifecycle, personas, value creation, & SWOT analysis.</li></ul>
+          </div>
+           <div class="resume-item">
+              <h4>Analytics <span>2025</span></h4>
+              <ul class="resume-list-box"><li>Pursuing UPenn Customer Analytics Certificate – customer data, predictive tools, business insights.</li></ul>
+          </div>
+      </div>
+
+      <!-- Hobbies -->
+      <div class="resume-category">
+          <h3>HOBBIES</h3>
+          <div class="resume-item">
+              <ul class="resume-list-box">
+                  <li>Beauty & Personal Care: Keenly tracking BPC innovations and learning how brands shape consumer choices.</li>
+                  <li>AI-assisted Co-living: Leveraged AI tools to create & host a personal branding landing page on GitHub.</li>
+                  <li>Painting: Enjoy working across multiple mediums, currently focusing on digital illustrations & sketches.</li>
+                  <li>Gaming: Passionate about both co-op and strategy games, with an interest in narrative-driven play.</li>
+              </ul>
+          </div>
+      </div>
+      
+  </section>
+
+</div> <!-- End .main-container -->
+
 
   <script>
     const display = document.getElementById('display');
     const dispensedArea = document.getElementById('dispensedArea');
     const progressText = document.getElementById('progressText');
     const progressFill = document.getElementById('progressFill');
+    let isDispensing = false; // Prevents clicking while dispensing
 
+    // Updated snackNames to 8 items
     const snackNames = [
-      'Brand Juice', 'Collab Chips', 'Behavior Bar', 'Philosophy Fizz', 'Tata Treats',
-      'Process Pop', 'Copy Crunch', 'Speaker Soda', 'Collab Caramel', 'Action Bites'
+      'Brand Juice', 'Copy Crunch', 'Process Pop', 'Design Drizzle', 'Strategy Sundae',
+      'Collab Chips', 'Behavior Bar', 'Mystery Snack'
     ];
 
     let triedSnacks = new Set();
+    
+    // --- Audio Functions ---
+    let audioContext;
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) {
+        console.log('Audio not supported');
+    }
 
     function playSound(frequency, duration, type = 'sine') {
+      if (!audioContext) return;
       try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
         oscillator.connect(gainNode);
@@ -351,25 +788,48 @@
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + duration);
       } catch (e) {
-        console.log('Audio not supported');
+        console.error('Error playing sound:', e);
       }
     }
 
     function playClickSound() {
       playSound(800, 0.1, 'square');
     }
+    
+    // New "Whirring" motor sound
+    function playMotorSound() {
+        if (!audioContext) return;
+        // Low, rumbling square wave
+        const duration = 2.0; // 2 seconds
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(60, audioContext.currentTime); // Low freq
+        osc.frequency.linearRampToValueAtTime(40, audioContext.currentTime + duration); // Pitch down
+        gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioContext.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        osc.start();
+        osc.stop(audioContext.currentTime + duration);
+    }
 
+    // This is the "ding" sound
     function playDispenseSound() {
       setTimeout(() => playSound(523, 0.2), 0);
       setTimeout(() => playSound(659, 0.2), 100);
       setTimeout(() => playSound(784, 0.3), 200);
     }
 
+    // --- Machine Logic ---
+
     function updateProgress() {
-      const progress = (triedSnacks.size / 10) * 100;
-      progressText.textContent = `Snacks Tried: ${triedSnacks.size} / 10`;
+      // Updated total to 8
+      const totalSnacks = 8;
+      const progress = (triedSnacks.size / totalSnacks) * 100;
+      progressText.textContent = `Snacks Tried: ${triedSnacks.size} / ${totalSnacks}`;
       progressFill.style.width = `${progress}%`;
-      if (triedSnacks.size === 10) {
+      if (triedSnacks.size === totalSnacks) {
         setTimeout(() => {
           progressText.innerHTML = `🎉 All snacks collected! You've learned my full story! 🎉`;
           playSound(523, 0.5);
@@ -377,50 +837,109 @@
       }
     }
 
-    function dispenseItem(snackName, content, index) {
+    function dispenseItem(snackName, content, index, slotElement) {
+      if (isDispensing || triedSnacks.has(index)) return; // Don't dispense if busy or already tried
+      
+      isDispensing = true;
       playClickSound();
-      display.textContent = `✨ DISPENSING: ${snackName} – Crunchy insights incoming ✨`;
+      display.textContent = `VENDING: ${snackName}... please wait...`;
       dispensedArea.innerHTML = '';
-      triedSnacks.add(index);
-      updateProgress();
+      
+      // Disable all slots during dispensing
+      document.querySelectorAll('.product-slot').forEach(s => s.classList.add('disabled'));
+      
+      highlightSlot(slotElement, index, true); // Highlight persistently
+      
+      // 1. Play motor sound
+      playMotorSound();
+
+      // 2. Wait for motor sound to finish (2.5 seconds)
       setTimeout(() => {
+        // 3. Play "ding" sound
         playDispenseSound();
+        
+        // 4. Create and show the item
         const dispensedItem = document.createElement('div');
         dispensedItem.className = 'dispensed-item';
         dispensedItem.innerHTML = `<div class="dispensed-title">🎉 DISPENSED: ${snackName}</div>${content}`;
         dispensedArea.appendChild(dispensedItem);
         dispensedItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 500);
+
+        // 5. Update state
+        triedSnacks.add(index);
+        slotElement.classList.add('tried');
+        updateProgress();
+        
+        // 6. Reset display and re-enable buttons
+        isDispensing = false;
+        document.querySelectorAll('.product-slot').forEach(s => s.classList.remove('disabled'));
+        highlightSlot(slotElement, index, false); // Remove selection
+        
+        // Reset display text after a moment
+        setTimeout(() => {
+            if (!isDispensing) { // Only if another item isn't being vended
+                 display.textContent = "Hello, internet snacker! Pick another snack to know more about me!";
+            }
+        }, 3000);
+
+      }, 2500); // 2.5 second delay to match motor sound
     }
 
-    function highlightSlot(slot, index) {
+    function highlightSlot(slot, index, persistent = false) {
       document.querySelectorAll('.product-slot').forEach(s => s.classList.remove('selected'));
-      slot.classList.add('selected', 'tried');
-      setTimeout(() => slot.classList.remove('selected'), 2000);
+      slot.classList.add('selected');
+      if (!persistent) {
+        setTimeout(() => slot.classList.remove('selected'), 2000);
+      }
     }
 
     function resetMachine() {
+      if (isDispensing) return; // Don't reset while dispensing
+      
       triedSnacks.clear();
       updateProgress();
-      display.textContent = "I’ve packed this machine with flavour and function. Tap any snack to explore the strategy, story, and structure I'd bring to your organisation!";
+      // Updated reset text
+      display.textContent = "Hello, internet snacker! I'm Abigail, a freshly-minted MBA graduate who's passionate about marketing. I love bringing a blend of creativity and strategy to all I do, so pick a snack to know more about me!";
       dispensedArea.innerHTML = '';
       document.querySelectorAll('.product-slot').forEach(slot => {
         slot.classList.remove('selected', 'tried');
       });
+      playSound(100, 0.2, 'sawtooth');
     }
 
     document.querySelectorAll('.product-slot').forEach((slot, index) => {
       slot.addEventListener('click', () => {
+        // Resume audio context on user interaction
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        
         const content = slot.getAttribute('data-content');
         const snackName = snackNames[index];
-        dispenseItem(snackName, content, index);
-        highlightSlot(slot, index);
+        dispenseItem(snackName, content, index, slot);
       });
     });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') resetMachine();
     });
+    
+    // --- NEW SCRIPT FOR RESUME BUTTON ---
+    document.getElementById('resumeButton').addEventListener('click', () => {
+        // Resume audio context on user interaction
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        
+        const resumeSection = document.getElementById('resumeSection');
+        if (resumeSection) {
+            resumeSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+
   </script>
 </body>
 </html>
